@@ -313,6 +313,11 @@ module.exports = function(Chart) {
 					ctx.lineWidth = itemOrDefault(legendItem.lineWidth, lineDefault.borderWidth);
 					ctx.strokeStyle = itemOrDefault(legendItem.strokeStyle, globalDefault.defaultColor);
 
+					if (legendItem.hidden) {
+						ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+						ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+					}
+					
 					if (ctx.setLineDash) {
 						// IE 9 and 10 do not support line dash
 						ctx.setLineDash(itemOrDefault(legendItem.lineDash, lineDefault.borderDash));
@@ -325,16 +330,21 @@ module.exports = function(Chart) {
 					ctx.restore();
 				};
 				var fillText = function(x, y, legendItem, textWidth) {
-					ctx.fillText(legendItem.text, boxWidth + (fontSize / 2) + x, y);
-
+					ctx.save();
 					if (legendItem.hidden) {
+						ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+					}
+					ctx.fillText(legendItem.text, boxWidth + (fontSize / 2) + x, y);
+					ctx.restore();
+
+					/*if (legendItem.hidden) {
 						// Strikethrough the text if hidden
 						ctx.beginPath();
 						ctx.lineWidth = 2;
 						ctx.moveTo(boxWidth + (fontSize / 2) + x, y + (fontSize / 2));
 						ctx.lineTo(boxWidth + (fontSize / 2) + x + textWidth, y + (fontSize / 2));
 						ctx.stroke();
-					}
+					}*/
 				};
 
 				// Horizontal
